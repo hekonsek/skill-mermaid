@@ -4,5 +4,5 @@ This skill provides optionated way of documenting software architecture using Me
 
 ## Source materials
 
-- [ADRs](docs/adr/)
-- [Examples](docs/examples/)
+- [ADRs](adr/)
+- [Examples](references/)
