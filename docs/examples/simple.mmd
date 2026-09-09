@@ -5,8 +5,9 @@ config:
 
 %% Prefer generic flowcharts when possible
 flowchart LR
-    %% Define elements with labels before using them in the flowchart
-    queue@{ label: "Message Queue", shape: das } %% Represent queues with "das" shape 
+    %% Define elements with labels before using them in the flowchart.
+    %% Represent queues with "das" shape. 
+    queue@{ label: "Message Queue", shape: das } 
     producer[Producer]
     consumer[Consumer]
     db[(Database)] %% Represent databases with cylinder shape
