@@ -13,7 +13,7 @@ Produce approachable Mermaid diagrams that remain readable across supported rend
 
 1. Inspect the surrounding documentation, existing diagrams, and required output location before editing.
 2. Choose the simplest Mermaid diagram type that communicates the architecture. Prefer a generic flowchart unless a specialized diagram adds necessary meaning.
-3. Give nodes explicit, reader-facing labels and use shapes that convey meaning, such as cylinders for databases and asymmetric shapes for queues when supported.
+3. Give nodes explicit, reader-facing labels and use shapes that convey meaning, such as cylinders for databases and Mermaid's `das` shape for queues when supported.
 4. Add Mermaid configuration frontmatter and prefer the hand-drawn look:
 
    ```mermaid
