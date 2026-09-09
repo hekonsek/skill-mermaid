@@ -1,70 +1,71 @@
 ---
 name: skill-mermaid
-description: Create, revise, render, and review Mermaid diagrams for software architecture. Use for architectural components, dependencies, message flows, queues, databases, Mermaid source files, renderer compatibility, or SVG and PNG diagram exports.
+description: Create, edit, render, and review Mermaid architecture diagrams. Use for Mermaid source files, Mermaid code blocks, architecture visualizations, renderer compatibility, or SVG and PNG diagram exports.
 license: MIT
+compatibility: Primary rendering and full visual validation require the Mermaid CLI (`mmdc`). GitHub Markdown and VS Code Mermaid Preview are secondary compatibility targets.
 ---
 
 # Mermaid architecture diagrams
 
-Create architecture diagrams that emphasize relationships and remain readable across supported Mermaid renderers.
+Produce approachable Mermaid diagrams that remain readable across supported renderers.
 
-## Create or revise a diagram
+## Workflow
 
-1. Identify the components and relationships that the diagram must communicate.
-2. Prefer a generic `flowchart` unless another Mermaid diagram type expresses the architecture more clearly.
-3. Choose the flow direction deliberately; `LR` is often suitable for processing or dependency flows.
-4. Prefer Mermaid's hand-drawn look for an approachable, discussion-oriented architecture diagram:
+1. Inspect the surrounding documentation, existing diagrams, and required output location before editing.
+2. Choose the simplest Mermaid diagram type that communicates the architecture. Prefer a generic flowchart unless a specialized diagram adds necessary meaning.
+3. Give nodes explicit, reader-facing labels and use shapes that convey meaning, such as cylinders for databases and asymmetric shapes for queues when supported.
+4. Add Mermaid configuration frontmatter and prefer the hand-drawn look:
 
    ```mermaid
    ---
    config:
      look: handDrawn
    ---
+   flowchart LR
+       producer[Producer] --> queue@{ label: "Message Queue", shape: das }
+       queue --> consumer[Consumer]
+       consumer --> database[(Database)]
    ```
 
-   Use another look when hand-drawn rendering conflicts with an external design system, reduces clarity, requires precise alignment, or renders poorly in the required output.
-5. Define elements with concise, human-readable labels and semantic shapes before declaring their relationships.
-6. Add edges after the element definitions so the structure remains easy to scan and edit.
-7. Add comments only for non-obvious modeling choices. Put every `%%` comment on its own line; never append one to a statement and never put comments inside configuration frontmatter.
+   Use another look when hand-drawn rendering conflicts with an external design system, formal publishing requirements, compact layout, precise alignment, or output clarity.
+5. Keep each Mermaid comment on a separate line. Start it with `%%`; never append it to a statement and never put comments in configuration frontmatter.
+6. Keep source compatible with renderers in this priority order:
 
-Use established shapes where applicable:
+   1. Mermaid CLI (`mmdc`), which defines the intended presentation.
+   2. GitHub Markdown's Mermaid renderer.
+   3. VS Code Mermaid Preview.
 
-- Database: `db[(Database)]`
-- Message queue: `queue@{ label: "Message Queue", shape: das }`
+   Optional aesthetics may degrade in secondary renderers, but every supported renderer must parse the source, render it, and communicate the diagram clearly. Avoid or replace syntax that breaks a secondary renderer.
+7. Render SVG by default:
 
-## Renderer compatibility
+   ```sh
+   mmdc -i path/to/diagram.mmd -o path/to/diagram.svg
+   ```
 
-Treat renderers in this priority order:
+   Use PNG only when the target environment cannot display or accept SVG. Do not generate both formats without a concrete consumer requirement.
+8. Inspect the rendered artifact. Confirm that labels are legible, edges connect the intended nodes, the layout communicates the architecture, and optional styling has not obscured meaning. When the relevant environments are available, also preview the source in GitHub Markdown and VS Code Mermaid Preview.
 
-1. Mermaid CLI (`mmdc`) defines the intended presentation.
-2. GitHub Markdown Mermaid rendering must still parse, render, and communicate the content clearly.
-3. The Code Mermaid Preview plugin must also parse, render, and communicate the content clearly.
+## Comment syntax
 
-Lower-priority renderers may omit optional aesthetics such as hand-drawn styling or icons. Do not use an enhancement if it prevents the diagram from parsing or communicating clearly in a supported renderer.
-
-## Render and validate
-
-- Render with `mmdc` when it is available, for example `mmdc -i diagram.mmd -o diagram.svg`, and visually inspect labels, layout, edges, and shapes. Hand-drawn output can vary between Mermaid versions and tools.
-- Prefer SVG for rendered artifacts because it remains sharp and inspectable. Generate PNG only when the target environment cannot accept SVG.
-- Confirm every referenced node is defined and every rendered relationship matches the intended architecture.
-- Check GitHub Markdown and the Code Mermaid Preview plugin when those renderers are available. Aesthetic differences are acceptable; parse failures and unclear content are not.
-
-## Example
+Use:
 
 ```mermaid
----
-config:
-  look: handDrawn
----
-
-%% Use a flowchart to show the event-processing path.
-flowchart LR
-    queue@{ label: "Message Queue", shape: das }
-    producer[Producer]
-    consumer[Consumer]
-    db[(Database)]
-
-    producer --> queue
-    queue --> consumer
-    consumer --> db
+%% Explain a non-obvious relationship.
+producer --> consumer
 ```
+
+Do not use:
+
+```mermaid
+producer --> consumer %% Explain a non-obvious relationship.
+```
+
+## Completion checks
+
+- The diagram models the requested architecture without unnecessary detail.
+- `look: handDrawn` is present unless a documented constraint justifies another look.
+- Comments occupy their own lines and configuration frontmatter contains data only.
+- `mmdc` renders the source successfully.
+- Secondary renderers can parse and communicate the diagram, even if optional aesthetics differ.
+- The primary rendered artifact is SVG unless SVG is unsuitable for its destination.
+- The rendered output has been inspected visually, not merely generated.
