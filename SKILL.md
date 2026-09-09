@@ -9,6 +9,11 @@ compatibility: Primary rendering and full visual validation require the Mermaid 
 
 Produce approachable Mermaid diagrams that remain readable across supported renderers.
 
+## Bundled examples
+
+- Read [docs/examples/api.mmd](docs/examples/api.mmd) when modeling a compact user-to-API-to-database flow or using an icon-labeled actor. If the icon pack is unavailable, replace the icon node with a plain labeled node so the diagram remains clear.
+- Read [docs/examples/events.mmd](docs/examples/events.mmd) when modeling producers, message queues, consumers, and databases or when checking the preferred comment and shape conventions.
+
 ## Workflow
 
 1. Inspect the surrounding documentation, existing diagrams, and required output location before editing.
