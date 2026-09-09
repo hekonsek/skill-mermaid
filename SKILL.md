@@ -1,19 +1,19 @@
 ---
 name: skill-mermaid
-description: Create and revise Mermaid diagrams for software architecture with a discussion-oriented, hand-drawn visual style. Use when documenting architectural components, relationships, message flows, queues, databases, or other system structure in Mermaid.
+description: Create, revise, render, and review Mermaid diagrams for software architecture. Use for architectural components, dependencies, message flows, queues, databases, Mermaid source files, renderer compatibility, or SVG and PNG diagram exports.
 license: MIT
 ---
 
 # Mermaid architecture diagrams
 
-Create Mermaid diagrams that communicate architectural relationships clearly and feel open to discussion and revision.
+Create architecture diagrams that emphasize relationships and remain readable across supported Mermaid renderers.
 
-## Workflow
+## Create or revise a diagram
 
 1. Identify the components and relationships that the diagram must communicate.
 2. Prefer a generic `flowchart` unless another Mermaid diagram type expresses the architecture more clearly.
-3. Choose the flow direction deliberately; use `LR` for left-to-right processing or dependency flows when appropriate.
-4. Add Mermaid frontmatter that selects the hand-drawn look:
+3. Choose the flow direction deliberately; `LR` is often suitable for processing or dependency flows.
+4. Prefer Mermaid's hand-drawn look for an approachable, discussion-oriented architecture diagram:
 
    ```mermaid
    ---
@@ -22,19 +22,32 @@ Create Mermaid diagrams that communicate architectural relationships clearly and
    ---
    ```
 
-5. Define each element with its label and semantic shape before declaring relationships.
+   Use another look when hand-drawn rendering conflicts with an external design system, reduces clarity, requires precise alignment, or renders poorly in the required output.
+5. Define elements with concise, human-readable labels and semantic shapes before declaring their relationships.
 6. Add edges after the element definitions so the structure remains easy to scan and edit.
-7. Render or preview the diagram and visually verify labels, layout, edges, and shapes in the target Mermaid tool.
+7. Add comments only for non-obvious modeling choices. Put every `%%` comment on its own line; never append one to a statement and never put comments inside configuration frontmatter.
 
-## Modeling conventions
+Use established shapes where applicable:
 
-- Use concise, human-readable labels that describe architectural roles.
-- Represent databases with Mermaid's cylinder syntax, such as `db[(Database)]`.
-- Represent message queues with the `das` shape, such as `queue@{ label: "Message Queue", shape: das }`.
-- Add comments only when they preserve a non-obvious modeling choice.
-- Prefer the hand-drawn look for architecture diagrams, but treat it as a preference rather than an absolute requirement.
+- Database: `db[(Database)]`
+- Message queue: `queue@{ label: "Message Queue", shape: das }`
 
-Use a different look when hand-drawn rendering conflicts with an external design system, reduces clarity for a complex or compact diagram, requires overly precise alignment, or renders poorly in the required publication format. When deviating, optimize for legibility and the target output.
+## Renderer compatibility
+
+Treat renderers in this priority order:
+
+1. Mermaid CLI (`mmdc`) defines the intended presentation.
+2. GitHub Markdown Mermaid rendering must still parse, render, and communicate the content clearly.
+3. The Code Mermaid Preview plugin must also parse, render, and communicate the content clearly.
+
+Lower-priority renderers may omit optional aesthetics such as hand-drawn styling or icons. Do not use an enhancement if it prevents the diagram from parsing or communicating clearly in a supported renderer.
+
+## Render and validate
+
+- Render with `mmdc` when it is available, for example `mmdc -i diagram.mmd -o diagram.svg`, and visually inspect labels, layout, edges, and shapes. Hand-drawn output can vary between Mermaid versions and tools.
+- Prefer SVG for rendered artifacts because it remains sharp and inspectable. Generate PNG only when the target environment cannot accept SVG.
+- Confirm every referenced node is defined and every rendered relationship matches the intended architecture.
+- Check GitHub Markdown and the Code Mermaid Preview plugin when those renderers are available. Aesthetic differences are acceptable; parse failures and unclear content are not.
 
 ## Example
 
@@ -44,6 +57,7 @@ config:
   look: handDrawn
 ---
 
+%% Use a flowchart to show the event-processing path.
 flowchart LR
     queue@{ label: "Message Queue", shape: das }
     producer[Producer]
@@ -54,10 +68,3 @@ flowchart LR
     queue --> consumer
     consumer --> db
 ```
-
-## Validation
-
-- Confirm that the Mermaid source parses in the target renderer.
-- Confirm that every referenced node is explicitly defined.
-- Check that the rendered relationships match the intended architecture.
-- Visually inspect exported output because hand-drawn rendering may vary between Mermaid versions and tools.
