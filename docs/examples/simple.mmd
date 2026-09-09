@@ -10,7 +10,8 @@ flowchart LR
     queue@{ label: "Message Queue", shape: das } 
     producer[Producer]
     consumer[Consumer]
-    db[(Database)] %% Represent databases with cylinder shape
+    %% Represent databases with cylinder shape.
+    db[(Database)] 
 
     producer --> queue
     queue --> consumer
