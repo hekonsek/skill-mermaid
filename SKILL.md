@@ -9,8 +9,8 @@ Produce approachable Mermaid diagrams.
 
 ## References
 
-- Use [api.mmd](references/api.mmd) as a reference for modeling an API architecture. For example for user consuming an API that interacts with a database or other systems.
-- Use [events.mmd](references/events.mmd) as a reference for modeling event-driven architectures. For example for system consisting of producers, message queues, and consumers.
+- Use [api.mmd](references/examples/api.mmd) as a reference for modeling an API architecture. For example for user consuming an API that interacts with a database or other systems.
+- Use [events.mmd](references/examples/events.mmd) as a reference for modeling event-driven architectures. For example for system consisting of producers, message queues, and consumers.
 
 ## ADRs
 
